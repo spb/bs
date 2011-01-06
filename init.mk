@@ -1,0 +1,12 @@
+ifndef BS__INIT_MK
+BS__INIT_MK=1
+
+BUILDDIR ?= build
+TMPDIR ?= intermediate
+
+PER_TARGET_VARIABLES = CXXFLAGS LDFLAGS SOURCES
+
+DIRS += $(BUILDDIR) $(TMPDIR) $(BUILDDIR)/lib
+
+
+endif
