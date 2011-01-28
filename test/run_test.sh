@@ -25,7 +25,7 @@ run()
         echo "OK"
     else
         echo "failed"
-        return $ret
+        exit $ret
     fi
 }
 
@@ -50,6 +50,7 @@ run_and_compare()
         echo "OK"
     else
         diff -u "${BASELINE_OUT}" "${TEST_OUT}"
+        exit $?
     fi
 }
 
