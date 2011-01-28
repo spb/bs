@@ -1,4 +1,4 @@
-SUBDIRS = library library2
+SUBDIRS = library library2 executable
 
 CXXFLAGS += -D__GLOBAL_DEFINE__
 
