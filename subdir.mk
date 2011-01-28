@@ -1,7 +1,14 @@
 ifndef BS__SUBDIR_MK
 BS__SUBDIR_MK=1
 
+# In this file resides most of the scary voodoo. Essentially, we include
+# build.mk from each subdirectory in turn, doing appropriate reassignments to
+# isolate its settings from those in any other subdirectory.
+
 define subdir-include
+
+$(eval $(call save-vars,$(SUBDIR_VARIABLES),subdir_$(1)))
+$(foreach v,$(SUBDIR_VARIABLES),$(eval $(v)=))
 
 $(eval include $(1)/build.mk)
 
@@ -14,6 +21,12 @@ $(foreach dso,$(DSOS), \
         $(eval $(fulldso)_$(v)=$($(dso)_$(v))) \
     ) \
 )
+
+$(foreach v,$(SUBDIR_VARIABLES), \
+    $(eval $(1)_$(v)=$($(v))) \
+)
+
+$(eval $(call load-vars,subdir_$(1)))
 
 endef
 
