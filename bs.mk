@@ -3,6 +3,16 @@ BS_MK=1
 
 default: all
 
+ifndef BS_DIR
+ifneq ($(MAKEFILE_LIST),)
+BS_DIR := $(patsubst %/bs.mk,%,$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
+endif
+endif
+
+ifeq ($(BS_DIR),)
+$(error Could not locate BS root directory -- try setting $$(BS_DIR))
+endif
+
 include $(BS_DIR)/init.mk
 include $(BS_DIR)/functions.mk
 include $(BS_DIR)/depends.mk
