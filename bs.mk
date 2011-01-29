@@ -5,6 +5,7 @@ default: all
 
 include $(BS_DIR)/init.mk
 include $(BS_DIR)/functions.mk
+include $(BS_DIR)/depends.mk
 include $(BS_DIR)/subdir.mk
 
 all: $(BUILD_DSOS) $(BUILD_EXECUTABLES)
@@ -35,12 +36,15 @@ define exec-rule
 $(objects-rule)
 
 $(BUILD_EXEC_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/bin
-	g++ -o$$@ $(call expand-target-variable,$(1),LDFLAGS) $(OBJECTS_$(1))
+	g++ -o$$@ \
+	    $(addprefix -L,$(dir $(sort $(BUILD_DSOS)))) \
+	    $(call expand-target-variable,$(1),LDFLAGS) \
+	    $(call expand-target-dependencies,$(1)) \
+	    $(OBJECTS_$(1))
 
 endef
 
 $(foreach dsoname, $(ALL_DSOS), $(eval $(call dso-rule,$(dsoname))))
-$(foreach dsoname, $(ALL_DSOS), $(info $(call dso-rule,$(dsoname))))
 $(foreach execname, $(ALL_EXECS), $(eval $(call exec-rule,$(execname))))
 
 $(DIRS):

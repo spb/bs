@@ -16,6 +16,7 @@ $(foreach dso,$(DSOS), \
     $(eval fulldso = $(1)/$(dso)) \
     $(eval ALL_DSOS += $(fulldso)) \
     $(eval BUILD_DSO_$(fulldso) = $(BUILDDIR)/lib/lib$(dso).so) \
+    $(eval LIBRARY_NAME_$(fulldso) = $(dso)) \
     $(eval SUBDIR_$(fulldso) = $(1)) \
     $(foreach v,$(TARGET_VARIABLES), \
         $(eval $(fulldso)_$(v)=$($(dso)_$(v))) \
