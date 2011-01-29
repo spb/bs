@@ -14,7 +14,10 @@ define objects-rule
 $(call add-dir, $(TMPDIR)/$(SUBDIR_$(1)))
 
 $(OBJECTS_$(1)): $(TMPDIR)/$(SUBDIR_$(1))/%.o: $(SUBDIR_$(1))/%.cc | $(TMPDIR)/$(SUBDIR_$(1))
-	$(CXX) -c -fPIC -o$$@ $(CXXFLAGS) $($(1)_CXXFLAGS) $($(SUBDIR_$(1))_CXXFLAGS) $$<
+	$(CXX) -c -fPIC -o$$@ \
+	    $(call expand-target-variable,$(1),CPPFLAGS) \
+	    $(call expand-target-variable,$(1),CXXFLAGS) \
+	    $$<
 
 endef
 
@@ -23,7 +26,7 @@ define dso-rule
 $(objects-rule)
 
 $(BUILD_DSO_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/lib
-	g++ -shared -o$$@ $($(1)_LDFLAGS) $(OBJECTS_$(1))
+	g++ -shared -o$$@ $(call expand-target-variable,$(1),LDFLAGS) $(OBJECTS_$(1))
 
 endef
 
@@ -32,7 +35,7 @@ define exec-rule
 $(objects-rule)
 
 $(BUILD_EXEC_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/bin
-	g++ -o$$@ $($(1)_LDFLAGS) $(OBJECTS_$(1))
+	g++ -o$$@ $(call expand-target-variable,$(1),LDFLAGS) $(OBJECTS_$(1))
 
 endef
 

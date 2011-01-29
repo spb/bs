@@ -31,4 +31,22 @@ save-vars=$(eval __saved_vars_$(2)=$(1)) \
 #
 load-vars=$(foreach v,$(__saved_vars_$(1)),$(eval $(v)=$(value __saved_$(v)_$(1))))
 
+# expand-target-variable
+#
+# Arguments: target name, variable name
+#
+# Returns the value of the given variable to use when building the named target.
+#
+# This consists of:
+#  - the global default value
+#  - the value specified in the target's subdirectory (if the variable name is
+#    in SUBDIR_VARIABLES)
+#  - the target-specific value specified in the target's subdirectory (if the
+#    variable name is in PER_TARGET_VARIABLES)
+#
+
+expand-target-variable=$($(2)) \
+			$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(SUBDIR_$(1))_$(2)),) \
+			$(if $(filter $(2),$(TARGET_VARIABLES)),$($(1)_$(2)),)
+
 endif

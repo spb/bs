@@ -17,7 +17,7 @@ $(foreach dso,$(DSOS), \
     $(eval ALL_DSOS += $(fulldso)) \
     $(eval BUILD_DSO_$(fulldso) = $(BUILDDIR)/lib/lib$(dso).so) \
     $(eval SUBDIR_$(fulldso) = $(1)) \
-    $(foreach v,$(PER_TARGET_VARIABLES), \
+    $(foreach v,$(TARGET_VARIABLES), \
         $(eval $(fulldso)_$(v)=$($(dso)_$(v))) \
     ) \
 )
@@ -27,7 +27,7 @@ $(foreach exec,$(EXECUTABLES), \
     $(eval ALL_EXECS += $(fullexec)) \
     $(eval BUILD_EXEC_$(fullexec) = $(BUILDDIR)/bin/$(exec)) \
     $(eval SUBDIR_$(fullexec) = $(1)) \
-    $(foreach v, $(PER_TARGET_VARIABLES), \
+    $(foreach v, $(TARGET_VARIABLES), \
         $(eval $(fullexec)_$(v)=$($(exec)_$(v))) \
     ) \
 )
