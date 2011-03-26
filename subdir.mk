@@ -53,9 +53,9 @@ BUILD_DSOS = $(foreach d,$(ALL_DSOS),$(BUILD_DSO_$(d)))
 BUILD_EXECUTABLES = $(foreach e,$(ALL_EXECS),$(BUILD_EXEC_$(e)))
 
 $(foreach d,$(ALL_DSOS), \
-    $(eval OBJECTS_$(d) = $(patsubst %.cc,$(TMPDIR)/$(SUBDIR_$(d))/%.o,$($(d)_SOURCES))))
+    $(eval OBJECTS_$(d) = $(patsubst %.cc,$(TMPROOT)/$(SUBDIR_$(d))/%.o,$($(d)_SOURCES))))
 
 $(foreach e,$(ALL_EXECS), \
-    $(eval OBJECTS_$(e) = $(patsubst %.cc,$(TMPDIR)/$(SUBDIR_$(e))/%.o,$($(e)_SOURCES))))
+    $(eval OBJECTS_$(e) = $(patsubst %.cc,$(TMPROOT)/$(SUBDIR_$(e))/%.o,$($(e)_SOURCES))))
 
 endif

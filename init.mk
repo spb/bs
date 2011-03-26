@@ -2,12 +2,12 @@ ifndef BS__INIT_MK
 BS__INIT_MK=1
 
 BUILDDIR ?= build
-TMPDIR ?= intermediate
+TMPROOT ?= intermediate
 
 TARGET_VARIABLES = CXXFLAGS LDFLAGS SOURCES LIBRARIES
 SUBDIR_VARIABLES = CXXFLAGS LDFLAGS DSOS EXECUTABLES SUBDIRS
 
-DIRS += $(BUILDDIR) $(TMPDIR) $(BUILDDIR)/lib $(BUILDDIR)/bin
+DIRS += $(BUILDDIR) $(TMPROOT) $(BUILDDIR)/lib $(BUILDDIR)/bin
 
 # Default values for variables that can later be added to
 CPPFLAGS = -I.

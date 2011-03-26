@@ -22,9 +22,9 @@ all: $(BUILD_DSOS) $(BUILD_EXECUTABLES)
 
 define objects-rule
 
-$(call add-dir, $(TMPDIR)/$(SUBDIR_$(1)))
+$(call add-dir, $(TMPROOT)/$(SUBDIR_$(1)))
 
-$(OBJECTS_$(1)): $(TMPDIR)/$(SUBDIR_$(1))/%.o: $(SUBDIR_$(1))/%.cc | $(TMPDIR)/$(SUBDIR_$(1))
+$(OBJECTS_$(1)): $(TMPROOT)/$(SUBDIR_$(1))/%.o: $(SUBDIR_$(1))/%.cc | $(TMPROOT)/$(SUBDIR_$(1))
 	$(CXX) -c -fPIC -o$$@ \
 	    $(call expand-target-variable,$(1),CPPFLAGS) \
 	    $(call expand-target-variable,$(1),CXXFLAGS) \
