@@ -7,6 +7,7 @@ BS__SUBDIR_MK=1
 
 define subdir-include
 
+$(eval SUBDIR=$(1))
 $(eval $(call save-vars,$(SUBDIR_VARIABLES),subdir_$(1)))
 $(foreach v,$(SUBDIR_VARIABLES),$(eval $(v)=))
 
@@ -35,6 +36,10 @@ $(foreach exec,$(EXECUTABLES), \
 
 $(foreach v,$(SUBDIR_VARIABLES), \
     $(eval $(1)_$(v)=$($(v))) \
+)
+
+$(foreach v,$($(1)_SUBDIRS), \
+    $(eval $(call subdir-include,$(1)/$(v))) \
 )
 
 $(eval $(call load-vars,subdir_$(1)))
