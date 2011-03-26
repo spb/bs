@@ -1,3 +1,4 @@
 test/build
 test/intermediate
 test/test_run
+.*.swp
