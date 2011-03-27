@@ -4,6 +4,15 @@ BS__SUBDIR_MK=1
 # In this file resides most of the scary voodoo. Essentially, we include
 # build.mk from each subdirectory in turn, doing appropriate reassignments to
 # isolate its settings from those in any other subdirectory.
+#
+# Annoyingly, the use of eval on every line inside here is, I think, required
+# to support recursive including (and hence SUBDIRS more than one level deep).
+#
+# Essentially, the first include must be processed completely before we can
+# know how many other include statements will be needed, hence it must be
+# eval-ed in here, and everything else then cascades -- we need to do the other
+# processing of this subdir before doing anything to the next one, so that must
+# be eval-ed immediately, etc.
 
 define subdir-include
 
@@ -39,8 +48,7 @@ $(foreach v,$(SUBDIR_VARIABLES), \
 )
 
 $(foreach v,$($(1)_SUBDIRS), \
-    $(eval $(call subdir-include,$(1)/$(v))) \
-)
+    $(eval $(call subdir-include,$(1)/$(v))))
 
 $(eval $(call load-vars,subdir_$(1)))
 
@@ -51,11 +59,5 @@ $(foreach s,$(SUBDIRS),$(eval $(call subdir-include,$(s))))
 
 BUILD_DSOS = $(foreach d,$(ALL_DSOS),$(BUILD_DSO_$(d)))
 BUILD_EXECUTABLES = $(foreach e,$(ALL_EXECS),$(BUILD_EXEC_$(e)))
-
-$(foreach d,$(ALL_DSOS), \
-    $(eval OBJECTS_$(d) = $(patsubst %.cc,$(TMPROOT)/$(SUBDIR_$(d))/%.o,$($(d)_SOURCES))))
-
-$(foreach e,$(ALL_EXECS), \
-    $(eval OBJECTS_$(e) = $(patsubst %.cc,$(TMPROOT)/$(SUBDIR_$(e))/%.o,$($(e)_SOURCES))))
 
 endif

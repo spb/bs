@@ -35,7 +35,8 @@ load-vars=$(foreach v,$(__saved_vars_$(1)),$(eval $(v)=$(value __saved_$(v)_$(1)
 #
 # Arguments: target name, variable name
 #
-# Returns the value of the given variable to use when building the named target.
+# Returns the concatenated value of the given variable to use when building the
+# named target.
 #
 # This consists of:
 #  - the global default value
@@ -48,5 +49,20 @@ load-vars=$(foreach v,$(__saved_vars_$(1)),$(eval $(v)=$(value __saved_$(v)_$(1)
 expand-target-variable=$($(2)) \
 			$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(SUBDIR_$(1))_$(2)),) \
 			$(if $(filter $(2),$(TARGET_VARIABLES)),$($(1)_$(2)),)
+
+# get-target-variable
+#
+# Arguments: target name, variable name
+#
+# Returns the most specific defind value of the given variable for the named
+# target. Unlike expand-target-variable which concatenates all defined versions,
+# this returns only the most specific version.
+
+_bs_first_defined = $(if $(1),$(1),$(if $(2),$(2),$(3)))
+get-target-variable = $(call _bs_first_defined, \
+			$(if $(filter $(2),$(TARGET_VARIABLES)),$($(1)_$(2)),), \
+			$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(SUBDIR_$(1))_$(2)),), \
+			$($(2)) \
+		       )
 
 endif

@@ -15,26 +15,17 @@ endif
 
 include $(BS_DIR)/init.mk
 include $(BS_DIR)/functions.mk
+include $(BS_DIR)/language-functions.mk
 include $(BS_DIR)/depends.mk
 include $(BS_DIR)/subdir.mk
 
+include $(wildcard $(BS_DIR)/language/*.mk)
+
+include $(BS_DIR)/objects.mk
+
 all: $(BUILD_DSOS) $(BUILD_EXECUTABLES)
 
-define objects-rule
-
-$(call add-dir, $(TMPROOT)/$(SUBDIR_$(1)))
-
-$(OBJECTS_$(1)): $(TMPROOT)/$(SUBDIR_$(1))/%.o: $(SUBDIR_$(1))/%.cc | $(TMPROOT)/$(SUBDIR_$(1))
-	$(CXX) -c -fPIC -o$$@ \
-	    $(call expand-target-variable,$(1),CPPFLAGS) \
-	    $(call expand-target-variable,$(1),CXXFLAGS) \
-	    $$<
-
-endef
-
 define dso-rule
-
-$(objects-rule)
 
 $(BUILD_DSO_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/lib
 	g++ -shared -o$$@ $(call expand-target-variable,$(1),LDFLAGS) $(OBJECTS_$(1))
@@ -42,8 +33,6 @@ $(BUILD_DSO_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/lib
 endef
 
 define exec-rule
-
-$(objects-rule)
 
 $(BUILD_EXEC_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/bin
 	g++ -o$$@ \
