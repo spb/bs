@@ -14,6 +14,23 @@ BS__SUBDIR_MK=1
 # processing of this subdir before doing anything to the next one, so that must
 # be eval-ed immediately, etc.
 
+# Arguments: subdir, target type
+define process-subdir-target-type
+
+$(foreach target, $($(2)S), \
+    $(eval _BS_ALL_TARGETS += $(1)/$(target)) \
+    $(eval _BS_TARGET_TYPE_$(1)/$(target) = $(2)) \
+    $(eval _BS_BUILD_TARGET_$(1)/$(target) = $(BUILDDIR)/$(call _BS_DEFAULT_OUTPUT_$(2),$(target))) \
+    $(eval SUBDIR_$(1)/$(target) = $(1)) \
+    $(eval $(call _BS_EXTRA_TARGET_SETTINGS_$(2),$(1),$(target))) \
+    $(foreach v,$(TARGET_VARIABLES), \
+        $(eval $(1)/$(target)_$(v)=$(value $(target)_$(v))) \
+    ) \
+)
+
+endef
+
+# Arguments: subdir path
 define subdir-include
 
 $(eval SUBDIR=$(1))
@@ -22,26 +39,8 @@ $(foreach v,$(SUBDIR_VARIABLES),$(eval $(v)=))
 
 $(eval include $(1)/build.mk)
 
-$(foreach dso,$(DSOS), \
-    $(eval fulldso = $(1)/$(dso)) \
-    $(eval ALL_DSOS += $(fulldso)) \
-    $(eval BUILD_DSO_$(fulldso) = $(BUILDDIR)/lib/lib$(dso).so) \
-    $(eval LIBRARY_NAME_$(fulldso) = $(dso)) \
-    $(eval SUBDIR_$(fulldso) = $(1)) \
-    $(foreach v,$(TARGET_VARIABLES), \
-        $(eval $(fulldso)_$(v)=$($(dso)_$(v))) \
-    ) \
-)
-
-$(foreach exec,$(EXECUTABLES), \
-    $(eval fullexec = $(1)/$(exec)) \
-    $(eval ALL_EXECS += $(fullexec)) \
-    $(eval BUILD_EXEC_$(fullexec) = $(BUILDDIR)/bin/$(exec)) \
-    $(eval SUBDIR_$(fullexec) = $(1)) \
-    $(foreach v, $(TARGET_VARIABLES), \
-        $(eval $(fullexec)_$(v)=$($(exec)_$(v))) \
-    ) \
-)
+$(foreach type, $(_BS_SUPPORTED_TARGETS), \
+    $(eval $(call process-subdir-target-type,$(1),$(type))))
 
 $(foreach v,$(SUBDIR_VARIABLES), \
     $(eval $(1)_$(v)=$($(v))) \
@@ -57,7 +56,6 @@ endef
 #include $(foreach s,$(SUBDIRS),$(s)/build.mk)
 $(foreach s,$(SUBDIRS),$(eval $(call subdir-include,$(s))))
 
-BUILD_DSOS = $(foreach d,$(ALL_DSOS),$(BUILD_DSO_$(d)))
-BUILD_EXECUTABLES = $(foreach e,$(ALL_EXECS),$(BUILD_EXEC_$(e)))
+ALL_BUILD_TARGETS = $(foreach t, $(_BS_ALL_TARGETS), $(_BS_BUILD_TARGET_$(t)))
 
 endif

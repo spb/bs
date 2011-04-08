@@ -1,6 +1,13 @@
 ifndef BS__FUNCTIONS_MK
 BS__FUNCTIONS_MK=1
 
+# dirname
+#
+# Arguments: a file name
+#
+# Returns the directory containing the given file name. Differs from
+# $(dir $(FOO)) in that this won't have a trailing slash. Grr.
+dirname=$(patsubst %/,%,$(dir $(1)))
 
 # add-dir
 #
@@ -10,7 +17,7 @@ BS__FUNCTIONS_MK=1
 # automatically created.
 #
 _do_add_dir=$(if $(filter $(1),$(DIRS)),,$(eval DIRS += $(1)))
-add-dir=$(foreach d,$(1),$(call _do_add_dir,$(patsubst %/,%,$(d))))
+add-dir=$(foreach d,$(1),$(call _do_add_dir,$(d)))
 
 # save-vars
 #

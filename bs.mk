@@ -17,34 +17,20 @@ include $(BS_DIR)/init.mk
 include $(BS_DIR)/functions.mk
 include $(BS_DIR)/language-functions.mk
 include $(BS_DIR)/depends.mk
-include $(BS_DIR)/subdir.mk
 
 include $(wildcard $(BS_DIR)/language/*.mk)
+include $(wildcard $(BS_DIR)/targets/*.mk)
 
+include $(BS_DIR)/subdir.mk
 include $(BS_DIR)/objects.mk
 
-all: $(BUILD_DSOS) $(BUILD_EXECUTABLES)
+all: $(ALL_BUILD_TARGETS)
 
-define dso-rule
+$(foreach target,$(_BS_ALL_TARGETS), \
+    $(eval $(call _BS_TARGET_RULE_$(_BS_TARGET_TYPE_$(target)),$(target))))
 
-$(BUILD_DSO_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/lib
-	g++ -shared -o$$@ $(call expand-target-variable,$(1),LDFLAGS) $(OBJECTS_$(1))
-
-endef
-
-define exec-rule
-
-$(BUILD_EXEC_$(1)): $(OBJECTS_$(1)) | $(BUILDDIR)/bin
-	g++ -o$$@ \
-	    $(addprefix -L,$(dir $(sort $(BUILD_DSOS)))) \
-	    $(call expand-target-variable,$(1),LDFLAGS) \
-	    $(call expand-target-dependencies,$(1)) \
-	    $(OBJECTS_$(1))
-
-endef
-
-$(foreach dsoname, $(ALL_DSOS), $(eval $(call dso-rule,$(dsoname))))
-$(foreach execname, $(ALL_EXECS), $(eval $(call exec-rule,$(execname))))
+#$(foreach target,$(_BS_ALL_TARGETS), \
+    $(info $(call _BS_TARGET_RULE_$(_BS_TARGET_TYPE_$(target)),$(target))))
 
 $(DIRS):
 	mkdir -p $@
