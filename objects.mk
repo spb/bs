@@ -1,7 +1,7 @@
 ifndef BS__OBJECTS_MK
 BS__OBJECTS_MK=1
 
-_bs_source_to_object=$(TMPROOT)/$(SUBDIR_$(1))/$(call _BS_LANGUAGE_OBJECTS_$(2),$(basename $(notdir $(3))))
+_bs_source_to_object=$(TMPROOT)/$(SUBDIR_$(1))/$(call _BS_LANGUAGE_OBJECTS_$(2),$(basename $(3)))
 
 _bs_default_source_dirs = $(SUBDIR_$(1)) $(TMPROOT)/$(SUBDIR_$(1))/generated_source
 
