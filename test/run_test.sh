@@ -63,6 +63,7 @@ run make
 run_and_compare executable ./build/bin/executable
 run_and_compare executable2 ./build/bin/executable2
 run_and_compare multiple_languages ./build/bin/multi_language
+run_and_compare source_subdirs ./build/bin/source_subdirs
 
 # Check partial rebuilds
 echo "Checking partial builds: updating library/test_library.hh"

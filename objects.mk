@@ -11,7 +11,7 @@ _bs_default_source_dirs = $(SUBDIR_$(1)) $(TMPROOT)/$(SUBDIR_$(1))/generated_sou
 # return: path to found file, or empty if not found
 _bs_find_existing_source_file=$(word 1, $(wildcard $(foreach d, \
 			      $(call _bs_default_source_dirs,$(1)) \
-			      $(call expand-target-variable,$(1),SRCDIRS), \
+			      $(addprefix $(SUBDIR_$(1))/,$(call expand-target-variable,$(1),SRCDIRS)), \
 			      $(d)/$(2))))
 
 # Find the location to use for a source file
