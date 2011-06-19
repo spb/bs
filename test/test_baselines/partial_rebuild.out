@@ -1,0 +1,4 @@
+g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -o intermediate/library/test_library.o library/test_library.cc
+g++ -shared -o build/lib/libtest.so    intermediate/library/test_library.o 
+g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/executable/test_executable.o executable/test_executable.cc
+g++ -o build/bin/executable    -Lbuild/lib   -ltest  intermediate/executable/test_executable.o 
