@@ -14,9 +14,9 @@ _BS_LANGUAGE_GENERATED_HEADERS_CXX =
 # Arguments: target name, target object, input source file
 define _BS_LANGUAGE_COMPILE_RULE_CXX
 
-$(call add-dir,$(TMPROOT)/$(SUBDIR_$(1)))
+$(call add-dir,$(dir $(2)))
 
-$(2): $(3) | $(TMPROOT)/$(SUBDIR_$(1))
+$(2): $(3) | $(dir $(2))
 	$$(CXX) -c \
 	    $$(call expand-target-variable,$(1),CPPFLAGS) \
 	    $$(call expand-target-variable,$(1),CXXFLAGS) \

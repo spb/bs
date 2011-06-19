@@ -9,11 +9,9 @@ _BS_LANGUAGE_GENERATED_HEADERS_C=
 
 define _BS_LANGUAGE_COMPILE_RULE_C
 
-$(call add-dir,$(TMPROOT)/$(SUBDIR_$(1)))
+$(call add-dir,$(dir $(2)))
 
-$(2): $(3) | $(TMPROOT)/$(SUBDIR_$(1))
-
-$(2): $(3) | $(TMPROOT)/$(SUBDIR_$(1))
+$(2): $(3) | $(dir $(2))
 	$$(CC) -c \
 	    $$(call expand-target-variable,$(1),CPPFLAGS) \
 	    $$(call expand-target-variable,$(1),CFLAGS) \
