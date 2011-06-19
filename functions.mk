@@ -9,6 +9,13 @@ BS__FUNCTIONS_MK=1
 # $(dir $(FOO)) in that this won't have a trailing slash. Grr.
 dirname=$(patsubst %/,%,$(dir $(1)))
 
+# get-default
+#
+# Arguments: argument string, default string
+#
+# If the argument string is non-empty, return it. Else, return the default string
+get-default = $(if $(1),$(1),$(2))
+
 # add-dir
 #
 # Arguments: list of directories to add.

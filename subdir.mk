@@ -53,6 +53,10 @@ $(eval $(call load-vars,subdir_$(1)))
 
 endef
 
+# Variables usable by subdir build.mk files
+TMPDIR=$(TMPROOT)/$(SUBDIR)
+GENERATED_SOURCE_DIR=$(TMPDIR)/generated_source
+
 #include $(foreach s,$(SUBDIRS),$(s)/build.mk)
 $(foreach s,$(SUBDIRS),$(eval $(call subdir-include,$(s))))
 

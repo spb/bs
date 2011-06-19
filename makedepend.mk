@@ -12,11 +12,11 @@ define _dependency_file_rule
 $(call add-dir,$(dir $(2)))
 
 $(2): $(3) | $(dir $(2))
-	$(CXX) -MM -MG -MT '$(4)' \
+	@$(CXX) -MM -MP -MT '$(4)' \
 	    $$(call expand-target-variable,$(1),CPPFLAGS) \
 	    $$(call expand-target-variable,$(1),CXXFLAGS) \
 	    -o $$@ \
-	    $(3)
+	    $(3) &>/dev/null
 
 -include $(2)
 
