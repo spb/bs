@@ -20,7 +20,8 @@ define process-subdir-target-type
 $(foreach target, $($(2)S), \
     $(eval _BS_ALL_TARGETS += $(1)/$(target)) \
     $(eval _BS_TARGET_TYPE_$(1)/$(target) = $(2)) \
-    $(eval _BS_BUILD_TARGET_$(1)/$(target) = $(BUILDDIR)/$(call _BS_DEFAULT_OUTPUT_$(2),$(target))) \
+    $(eval _BS_BUILD_TARGET_$(1)/$(target) = \
+        $(BUILDDIR)/$(call get-default,$($(target)_FILENAME),$(call _BS_DEFAULT_OUTPUT_$(2),$(target)))) \
     $(eval SUBDIR_$(1)/$(target) = $(1)) \
     $(eval $(call _BS_EXTRA_TARGET_SETTINGS_$(2),$(1),$(target))) \
     $(foreach v,$(TARGET_VARIABLES), \

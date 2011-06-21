@@ -80,6 +80,7 @@ run_and_compare test_libname ./build/bin/test_libname
 # Above will probably still run even if the library name setting failed,
 # due to magic -l setting
 assert [[ -f build/lib/libtestlibname.so ]]
+assert [[ -f build/lib/testfilename.so ]]
 
 # Check partial rebuilds
 echo "Checking partial builds: updating library/test_library.hh"
