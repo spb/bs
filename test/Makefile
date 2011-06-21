@@ -3,7 +3,8 @@ SUBDIRS = library \
 	  executable \
 	  multiple_languages \
 	  generated_source \
-	  source_subdirs
+	  source_subdirs \
+	  set_library_name
 
 CXXFLAGS += -D__GLOBAL_DEFINE__ -fPIC
 

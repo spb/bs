@@ -54,6 +54,17 @@ run_and_compare()
     fi
 }
 
+assert()
+{
+    echo -n "Checking $@ ... "
+    if eval "$@"; then
+        echo "OK"
+    else
+        echo "failed"
+        exit 1
+    fi
+}
+
 cd $(dirname $0)
 rm -rf build intermediate
 
@@ -65,8 +76,14 @@ run_and_compare executable2 ./build/bin/executable2
 run_and_compare multiple_languages ./build/bin/multi_language
 run_and_compare source_subdirs ./build/bin/source_subdirs
 
+run_and_compare test_libname ./build/bin/test_libname
+# Above will probably still run even if the library name setting failed,
+# due to magic -l setting
+assert [[ -f build/lib/libtestlibname.so ]]
+
 # Check partial rebuilds
 echo "Checking partial builds: updating library/test_library.hh"
 touch library/test_library.hh
 run_and_compare partial_rebuild make
 
+echo "All OK"
