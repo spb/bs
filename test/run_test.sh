@@ -46,10 +46,10 @@ run_and_compare()
 
     echo -n "Running '${cmd[@]}' ... "
     "${cmd[@]}" >"${TEST_OUT}"
-    if diff -q "${TEST_OUT}" "${BASELINE_OUT}"; then
+    if diff -w -q "${TEST_OUT}" "${BASELINE_OUT}"; then
         echo "OK"
     else
-        diff -u "${BASELINE_OUT}" "${TEST_OUT}"
+        diff -w -u "${BASELINE_OUT}" "${TEST_OUT}"
         exit $?
     fi
 }
