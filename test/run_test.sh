@@ -82,6 +82,9 @@ run_and_compare test_libname ./build/bin/test_libname
 assert [[ -f build/lib/libtestlibname.so ]]
 assert [[ -f build/lib/testfilename.so ]]
 
+# Check perl extension built
+run_and_compare test_xs_extension perl -Ibuild/lib build/bin/test.pl
+
 # Check partial rebuilds
 echo "Checking partial builds: updating library/test_library.hh"
 touch library/test_library.hh

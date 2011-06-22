@@ -13,6 +13,10 @@ ifeq ($(BS_DIR),)
 $(error Could not locate BS root directory -- try setting $$(BS_DIR))
 endif
 
+# This really should be a default
+.DELETE_ON_ERROR:
+.SECONDARY:
+
 include $(BS_DIR)/init.mk
 include $(BS_DIR)/functions.mk
 include $(BS_DIR)/language-functions.mk

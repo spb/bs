@@ -9,6 +9,8 @@ _BS_EXTRA_TARGET_SETTINGS_DSO = LIBRARY_NAME_$(1)/$(2) := $$(call get-default,$$
 # one argument: target internal name
 define _BS_TARGET_RULE_DSO
 
+$(call add-dir,$(dir $(_BS_BUILD_TARGET_$(1))))
+
 $(_BS_BUILD_TARGET_$(1)): $(_BS_OBJECTS_$(1)) | $(call dirname,$(_BS_BUILD_TARGET_$(1)))
 	@rm -f $$@
 	$(CXX) -shared -o $$@ \
