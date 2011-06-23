@@ -34,4 +34,30 @@ expand-dependency = \
         -l$(LIBRARY_NAME_$(1)) \
     )
 
+# expand-target-dependency-files
+#
+# Arguments: target name
+#
+# Returns the list of (library) files that the target should depend on, in addition to its objects
+#
+
+expand-target-dependency-files = \
+    $(foreach d,$($(1)_LIBRARIES), \
+        $(call expand-dependency-file,$(d)))
+
+# expand-dependency-file
+#
+# Arguments: a dependency specification
+#
+# Returns the filename, if local to this project, that satisfies the dependency
+#
+# Used internally by expand-target-dependency-files
+#
+
+expand-dependency-file = \
+    $(if $(filter -l%,$(1)), \
+        , \
+        $(_BS_BUILD_TARGET_$(1)) \
+    )
+
 endif

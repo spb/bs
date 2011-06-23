@@ -85,9 +85,14 @@ assert [[ -f build/lib/testfilename.so ]]
 # Check perl extension built
 run_and_compare test_xs_extension perl -Ibuild/lib build/bin/test.pl
 
+run deptestexecutable ./build/bin/deptestexecutable
+
 # Check partial rebuilds
-echo "Checking partial builds: updating library/test_library.hh"
+# Header file to check that object -> header dependencies are generated correctly, and
+# source file to make sure that executables aren't relinked just because a shared library changed
+echo "Checking partial builds: updating library/test_library.hh and library_file_dependencies/library/library.cpp"
 touch library/test_library.hh
+touch library_file_dependencies/library/library.cpp
 run_and_compare partial_rebuild make
 
 echo "All OK"

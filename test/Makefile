@@ -4,6 +4,7 @@ SUBDIRS = library \
 	  multiple_languages \
 	  generated_source \
 	  source_subdirs \
+	  library_file_dependencies \
 	  set_library_name \
 	  xs
 
