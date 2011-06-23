@@ -16,6 +16,13 @@ dirname=$(patsubst %/,%,$(dir $(1)))
 # If the argument string is non-empty, return it. Else, return the default string
 get-default = $(if $(1),$(1),$(2))
 
+# get-unless-default
+#
+# Arguments: argument string, default string
+#
+# If the argument string isn't the same as the default string, return it
+get-unless-default = $(if $(filter-out $(2),$(1)),$(1))
+
 # add-dir
 #
 # Arguments: list of directories to add.
@@ -73,7 +80,8 @@ expand-target-variable=$($(2)) \
 # target. Unlike expand-target-variable which concatenates all defined versions,
 # this returns only the most specific version.
 
-_bs_first_defined = $(if $(1),$(1),$(if $(2),$(2),$(3)))
+_do_bs_first_defined = $(if $(1),$(1),$(if $(2),$(2),$(3)))
+_bs_first_defined = $(call _do_bs_first_defined,$(strip $1),$(strip $(2)),$(strip $(3)))
 get-target-variable = $(call _bs_first_defined, \
 			$(if $(filter $(2),$(TARGET_VARIABLES)),$($(1)_$(2)),), \
 			$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(SUBDIR_$(1))_$(2)),), \

@@ -45,8 +45,10 @@ run_and_compare()
     BASELINE_OUT="${TEST_BASELINE_DIR}/${name}.out"
 
     echo -n "Running '${cmd[@]}' ... "
-    "${cmd[@]}" >"${TEST_OUT}"
-    if diff -w -q "${TEST_OUT}" "${BASELINE_OUT}"; then
+    if ! "${cmd[@]}" >"${TEST_OUT}"; then
+        echo "failed"
+        exit 1
+    elif diff -w -q "${TEST_OUT}" "${BASELINE_OUT}"; then
         echo "OK"
     else
         diff -w -u "${BASELINE_OUT}" "${TEST_OUT}"
@@ -94,5 +96,15 @@ echo "Checking partial builds: updating library/test_library.hh and library_file
 touch library/test_library.hh
 touch library_file_dependencies/library/library.cpp
 run_and_compare partial_rebuild make
+
+#
+# Start over with a prefix defined
+#
+rm -rf build intermediate
+
+export LD_LIBRARY_PATH=build/usr/lib:$LD_LIBRARY_PATH
+
+run make_prefix make -f Makefile.prefix
+run_and_compare executable_prefix ./build/usr/bin/executable
 
 echo "All OK"
