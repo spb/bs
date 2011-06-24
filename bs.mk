@@ -28,7 +28,15 @@ include $(wildcard $(BS_DIR)/targets/*.mk)
 include $(BS_DIR)/subdir.mk
 include $(BS_DIR)/objects.mk
 
+.PHONY: all clean distclean install
+
 all: $(ALL_BUILD_TARGETS)
+
+clean distclean:
+	rm -rf $(BUILDDIR) $(TMPROOT)
+
+install:
+	rsync -rlptO $(BUILDDIR)/ /
 
 $(foreach target,$(_BS_ALL_TARGETS), \
     $(eval $(call _BS_TARGET_RULE_$(_BS_TARGET_TYPE_$(target)),$(target))))
