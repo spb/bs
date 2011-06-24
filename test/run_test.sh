@@ -88,6 +88,7 @@ assert [[ -f build/lib/testfilename.so ]]
 run_and_compare test_xs_extension perl -Ibuild/lib build/bin/test.pl
 
 run deptestexecutable ./build/bin/deptestexecutable
+run test_script ./build/bin/test_script.sh
 
 # Check partial rebuilds
 # Header file to check that object -> header dependencies are generated correctly, and
