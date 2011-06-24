@@ -35,7 +35,7 @@ all: $(ALL_BUILD_TARGETS)
 clean distclean:
 	rm -rf $(BUILDDIR) $(TMPROOT)
 
-install:
+install: all
 	rsync -rlptO $(BUILDDIR)/ /
 
 $(foreach target,$(_BS_ALL_TARGETS), \
