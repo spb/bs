@@ -1,6 +1,6 @@
 g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -o intermediate/library/test_library.o library/test_library.cc
-g++ -shared -o build/lib/libtest.so    intermediate/library/test_library.o 
+g++ -shared -o build/lib/libtest.so    -Lbuild/lib  intermediate/library/test_library.o 
 g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/executable/test_executable.o executable/test_executable.cc
-g++ -o build/bin/executable    -Lbuild/lib   -ltest  intermediate/executable/test_executable.o 
+g++ -o build/bin/executable    -Lbuild/lib    -ltest  intermediate/executable/test_executable.o 
 g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/library_file_dependencies/library/library.o library_file_dependencies/library/library.cpp
-g++ -shared -o build/lib/libdeptestlibrary.so    intermediate/library_file_dependencies/library/library.o 
+g++ -shared -o build/lib/libdeptestlibrary.so    -Lbuild/lib  intermediate/library_file_dependencies/library/library.o 
