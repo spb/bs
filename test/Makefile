@@ -6,8 +6,8 @@ SUBDIRS = library \
 	  source_subdirs \
 	  library_file_dependencies \
 	  set_library_name \
+	  script \
 	  xs \
-	  script
 
 CXXFLAGS += -D__GLOBAL_DEFINE__ -fPIC
 
