@@ -27,6 +27,7 @@ include $(wildcard $(BS_DIR)/targets/*.mk)
 
 include $(BS_DIR)/subdir.mk
 include $(BS_DIR)/objects.mk
+include $(BS_DIR)/data.mk
 
 .PHONY: all clean distclean install
 

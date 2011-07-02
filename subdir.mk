@@ -35,6 +35,7 @@ endef
 define subdir-include
 
 $(eval SUBDIR=$(1))
+$(eval _BS_ALL_SUBDIRS += $(SUBDIR))
 $(eval $(call save-vars,$(SUBDIR_VARIABLES),subdir_$(1)))
 $(foreach v,$(SUBDIR_VARIABLES),$(eval $(v)=))
 
@@ -61,6 +62,6 @@ GENERATED_SOURCE_DIR=$(TMPDIR)/generated_source
 #include $(foreach s,$(SUBDIRS),$(s)/build.mk)
 $(foreach s,$(SUBDIRS),$(eval $(call subdir-include,$(s))))
 
-ALL_BUILD_TARGETS = $(foreach t, $(_BS_ALL_TARGETS), $(_BS_BUILD_TARGET_$(t)))
+ALL_BUILD_TARGETS += $(foreach t, $(_BS_ALL_TARGETS), $(_BS_BUILD_TARGET_$(t)))
 
 endif

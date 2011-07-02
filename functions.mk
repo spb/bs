@@ -31,7 +31,7 @@ get-unless-default = $(if $(filter-out $(2),$(1)),$(1))
 # automatically created.
 #
 _do_add_dir=$(if $(filter $(1),$(DIRS)),,$(eval DIRS += $(1)))
-_add_one_dir=$(call _do_add_dir,$(1))$(call _do_add_dir,$(1)/)
+_add_one_dir=$(call _do_add_dir,$(1))$(call _do_add_dir,$(patsubst %/,%,$(1))/)
 add-dir=$(foreach d,$(1),$(call _add_one_dir,$(patsubst %/,%,$(d))))
 
 # save-vars
@@ -76,7 +76,7 @@ expand-target-variable=$($(2)) \
 #
 # Arguments: target name, variable name
 #
-# Returns the most specific defind value of the given variable for the named
+# Returns the most specific defined value of the given variable for the named
 # target. Unlike expand-target-variable which concatenates all defined versions,
 # this returns only the most specific version.
 
@@ -87,5 +87,26 @@ get-target-variable = $(call _bs_first_defined, \
 			$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(SUBDIR_$(1))_$(2)),), \
 			$($(2)) \
 		       )
+
+# expand-subdir-variable, get-subdir-variable
+#
+# As above, but for subdirectory variables not target ones
+expand-subdir-variable = $($(2)) $(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(1)_$(2)))
+get-subdir-variable = $(call _bs_first_defined,$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(1)_$(2))),$($(2)))
+
+# recurse-dir
+#
+# Arguments: A directory name
+#
+# Returns a space-separated list of all files in the given directory and all subdirectories,
+# excluding those that 'wildcard' doesn't match (i.e. dotfiles).
+#
+# This is quite simplistic, and not aware of symlinks. Be careful.
+
+recurse-dir = $(foreach f, $(wildcard $(1)/*), \
+    $(if $(wildcard $(f)/.), \
+        $(call recurse-dir,$(f)), \
+        $(f)))
+
 
 endif

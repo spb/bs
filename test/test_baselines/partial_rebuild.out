@@ -4,3 +4,4 @@ g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/executable/test_executa
 g++ -o build/bin/executable    -Lbuild/lib    -ltest  intermediate/executable/test_executable.o 
 g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/library_file_dependencies/library/library.o library_file_dependencies/library/library.cpp
 g++ -shared -o build/lib/libdeptestlibrary.so    -Lbuild/lib  intermediate/library_file_dependencies/library/library.o 
+cp -p script/TestData/TestTwo.pm build/lib/TestData/TestTwo.pm

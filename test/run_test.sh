@@ -89,13 +89,15 @@ run_and_compare test_xs_extension perl -Ibuild/lib build/bin/test.pl
 
 run deptestexecutable ./build/bin/deptestexecutable
 run test_script ./build/bin/test_script.sh
+run_and_compare test_script_pl ./build/bin/test_script.pl
 
 # Check partial rebuilds
 # Header file to check that object -> header dependencies are generated correctly, and
 # source file to make sure that executables aren't relinked just because a shared library changed
-echo "Checking partial builds: updating library/test_library.hh and library_file_dependencies/library/library.cpp"
+echo "Checking partial builds: updating files"
 touch library/test_library.hh
 touch library_file_dependencies/library/library.cpp
+touch script/TestData/TestTwo.pm
 run_and_compare partial_rebuild make
 
 #
