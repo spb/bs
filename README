@@ -1,0 +1,50 @@
+BS, a build system
+==================
+
+BS exists for a few reasons:
+ - Writing portable Makefiles that will work with any version of any make
+   implementation is more pain than it's worth.
+ - Automake is also painful.
+ - GNU make has been ported to just about everything that has a native make
+   implementation anyway.
+ - Recursive make is highly annoying for a great many reasons.
+
+The aim is to provide a simple, declarative way to define makefile settings,
+without using recursive make but while keeping most of the benefits it would
+provide (mainly in the convenience area).
+
+Requirements
+============
+
+ * GNU Make 3.81 or newer.
+
+BS itself requires only a recent enough GNU make. Obviously any compilers or
+other tools that you use it to call will also need to be installed. BS also
+provides no user interface for configurable options -- you'll have to provide
+that yourself, whether via autoconf or some other mechanism.
+
+The build and intermediate directories
+======================================
+
+BS is designed never to dirty your source tree -- all built output goes into
+either the build or intermediate directory (both of which may be renamed or
+relocated). The build directory contains only the final binaries in the
+appropriate layout for packaging or installation -- no separate 'make install'
+step is needed, though an install target is provided for manual installation.
+The intermediate directory contains all intermediate data -- generated source,
+object files and the like. While the precise layout of the intermediate
+directory should be considered an implementation detail, any part of it may be
+removed at any time to start a clean build of that area.
+
+Writing Makefiles
+=================
+
+A project using BS should (usually) have a single Makefile at the root of the
+source tree, which contains any global settings and a list of top-level
+subdirectories in the SUBDIRS variable.
+
+When BS descends into a subdirectory, it looks for a file named build.mk, which
+will define what should be built in this directory and how. It can also
+optionally define a further list of subdirectories into which to recurse. See
+the test suite for examples of almost all of BS's functionality.
+
