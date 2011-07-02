@@ -28,8 +28,9 @@ expand-data-files = \
 define data-subdir-rule
 
 .PHONY: _data_$(1)
-_data_$(1):
+_data_$(1): | $(call get-subdir-variable,$(1),DATADIR)
 
+$(call add-dir,$(call get-subdir-variable,$(1),DATADIR))
 
 $(foreach file,$(call expand-data-files,$(1)), \
         $(call data-file-rule,$(1),$(file)))
