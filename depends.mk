@@ -1,6 +1,9 @@
 ifndef BS__DEPENDS_MK
 BS__DEPENDS_MK=1
 
+# needed due to no escaping.
+comma=,
+
 # Functions for dealing with dependencies.
 #
 # These are dependencies between libraries/executables that control linker
@@ -17,7 +20,13 @@ BS__DEPENDS_MK=1
 
 expand-target-dependencies = \
     $(foreach d,$($(1)_LIBRARIES), \
-        $(call expand-dependency,$(d)))
+        $(call expand-dependency,$(d))) \
+    $(if $($(1)_CONTAINS), \
+        -Wl$(comma)--whole-archive \
+        $(foreach d,$($(1)_CONTAINS), \
+            $(call expand-dependency,$(d))) \
+        -Wl$(comma)--no-whole-archive \
+    )
 
 # expand-dependency
 #
@@ -43,7 +52,7 @@ expand-dependency = \
 #
 
 expand-target-dependency-files = \
-    $(foreach d,$($(1)_LIBRARIES), \
+    $(foreach d,$($(1)_LIBRARIES) $($(1)_CONTAINS), \
         $(call expand-dependency-file,$(d)))
 
 # expand-target-dependency-dsos
