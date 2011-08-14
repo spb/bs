@@ -18,6 +18,7 @@ $(_BS_BUILD_TARGET_$(1)): $(_BS_OBJECTS_$(1)) \
 	    $(call expand-target-variable,$(1),LDFLAGS) \
 	    $(_BS_OBJECTS_$(1)) \
 	    -L$(BUILDDIR)/$(LIBDIR) \
+	    -Wl,-rpath-link,$(BUILDDIR)/$(LIBDIR) \
 	    $(call expand-target-dependencies,$(1)) \
 
 endef

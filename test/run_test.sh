@@ -94,6 +94,8 @@ run_and_compare test_script_pl ./build/bin/test_script.pl
 assert [[ -d build/empty_dir_1 ]]
 assert [[ -d build/empty/dir/2 ]]
 
+run_and_compare libraries_needing_libraries ./build/bin/lnl
+
 # Check partial rebuilds
 # Header file to check that object -> header dependencies are generated correctly, and
 # source file to make sure that executables aren't relinked just because a shared library changed

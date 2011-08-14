@@ -11,13 +11,17 @@ define _BS_TARGET_RULE_DSO
 
 $(call add-dir,$(dir $(_BS_BUILD_TARGET_$(1))))
 
-$(_BS_BUILD_TARGET_$(1)): $(_BS_OBJECTS_$(1)) | $(call dirname,$(_BS_BUILD_TARGET_$(1)))
+$(_BS_BUILD_TARGET_$(1)): $(_BS_OBJECTS_$(1)) \
+			  $(call expand-target-dependency-statics,$(1)) \
+			| $(call dirname,$(_BS_BUILD_TARGET_$(1))) \
+			  $(call expand-target-dependency-dsos,$(1))
 	@rm -f $$@
 	$(CXX) -shared -o $$@ \
 	    $(call expand-target-variable,$(1),LDFLAGS) \
+	    $(_BS_OBJECTS_$(1)) \
 	    -L$(BUILDDIR)/$(LIBDIR) \
+	    -Wl,-rpath-link,$(BUILDDIR)/$(LIBDIR) \
 	    $(call expand-target-dependencies,$(1)) \
-	    $(_BS_OBJECTS_$(1))
 
 endef
 
