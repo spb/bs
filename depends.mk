@@ -46,6 +46,22 @@ expand-target-dependency-files = \
     $(foreach d,$($(1)_LIBRARIES), \
         $(call expand-dependency-file,$(d)))
 
+# expand-target-dependency-dsos
+#
+# Arguments: target name
+#
+# Returns the list of DSO files on which the target depends
+#
+expand-target-dependency-dsos = $(filter %.so, $(expand-target-dependency-files))
+
+# expand-target-dependency-statics
+#
+# Arguments: target name
+#
+# Returns the list of static library files on which the target depends
+#
+expand-target-dependency-statics = $(filter-out %.so, $(expand-target-dependency-files))
+
 # expand-dependency-file
 #
 # Arguments: a dependency specification

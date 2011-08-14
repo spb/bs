@@ -103,6 +103,11 @@ touch library_file_dependencies/library/library.cpp
 touch script/TestData/TestTwo.pm
 run_and_compare partial_rebuild make
 
+echo "Checking relink after static library update, but not dynamic"
+touch library/test_library.cc
+touch library2/test_library_2.cc
+run_and_compare library_relink make
+
 #
 # Start over with a prefix defined
 #

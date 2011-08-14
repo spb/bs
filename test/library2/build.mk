@@ -1,4 +1,4 @@
-DSOS = test2
+STATICS = test2
 
 test2_SOURCES = test_library_2.cc
 
