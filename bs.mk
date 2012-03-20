@@ -46,6 +46,6 @@ $(foreach target,$(_BS_ALL_TARGETS), \
     $(info $(call _BS_TARGET_RULE_$(_BS_TARGET_TYPE_$(target)),$(target))))
 
 $(DIRS):
-	mkdir -p $@
+	@mkdir -p $@
 
 endif

@@ -31,7 +31,7 @@ get-unless-default = $(if $(filter-out $(2),$(1)),$(1))
 # automatically created.
 #
 _do_add_dir=$(if $(filter $(1),$(DIRS)),,$(eval DIRS += $(1)))
-_add_one_dir=$(call _do_add_dir,$(1))$(call _do_add_dir,$(patsubst %/,%,$(1))/)
+_add_one_dir=$(call _do_add_dir,$(patsubst %/,%,$(1))/)
 add-dir=$(foreach d,$(1),$(call _add_one_dir,$(patsubst %/,%,$(d))))
 
 # save-vars
