@@ -1,0 +1,6 @@
+
+SUBDIRS = library tests
+
+CXXFLAGS += -fPIC
+
+include ../bs.mk

@@ -1,0 +1,10 @@
+g++ -c -I.   -fPIC   -o intermediate/tests/pass.o tests/pass.cpp
+g++ -o build/bin/test_pass intermediate/tests/pass.o  -Lbuild/lib -Wl,-rpath-link,build/lib     
+LD_LIBRARY_PATH=build/lib build/bin/test_pass
+Running passing test
+g++ -c -I.   -fPIC   -o intermediate/tests/dso.o tests/dso.cpp
+g++ -c -I.   -fPIC -D__BUILD_TEST_LIBRARY__  -o intermediate/library/test_library.o library/test_library.cc
+g++ -shared -o build/lib/libtest.so intermediate/library/test_library.o  -Lbuild/lib -Wl,-rpath-link,build/lib      
+g++ -o build/bin/test_needs_dso intermediate/tests/dso.o  -Lbuild/lib -Wl,-rpath-link,build/lib       -ltest  
+LD_LIBRARY_PATH=build/lib build/bin/test_needs_dso
+Running test that needs a library

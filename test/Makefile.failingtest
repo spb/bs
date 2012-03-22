@@ -1,0 +1,4 @@
+
+SUBDIRS = tests_fail
+
+include ../bs.mk

@@ -105,6 +105,9 @@ touch library_file_dependencies/library/library.cpp
 touch script/TestData/TestTwo.pm
 run_and_compare partial_rebuild make
 
+# If this runs too fast, the touch below might just end up putting the same timestamp as the output file created above
+sleep 1
+
 echo "Checking relink after static library update, but not dynamic"
 touch library/test_library.cc
 touch library2/test_library_2.cc
@@ -119,5 +122,27 @@ export LD_LIBRARY_PATH=build/usr/lib:$LD_LIBRARY_PATH
 
 run make_prefix make -f Makefile.prefix
 run_and_compare executable_prefix ./build/usr/bin/executable
+
+#
+# And run some tests
+#
+rm -rf build intermediate
+
+run_and_compare make_tests make -f Makefile.tests
+
+rm -rf build intermediate
+echo -n "Running 'make -f Makefile.failingtests' ... "
+make -f Makefile.failingtests &>test_run/failing_tests.out
+ret=$?
+if [[ $ret == 0 ]]; then
+    echo "succeeded, where it should have failed"
+    exit 1
+elif diff -w -q test_baselines/failing_tests.out test_run/failing_tests.out; then
+    echo "OK"
+else
+    diff -w -u test_baselines/failing_tests.out test_run/failing_tests.out
+    exit 1
+fi
+
 
 echo "All OK"

@@ -9,7 +9,7 @@ SUBDIRS = library \
 	  script \
 	  xs \
 	  create_dirs \
-	  libraries_needing_libraries
+	  libraries_needing_libraries \
 
 CXXFLAGS += -D__GLOBAL_DEFINE__ -fPIC
 

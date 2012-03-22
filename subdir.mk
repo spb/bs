@@ -22,6 +22,8 @@ $(foreach target, $($(2)S), \
     $(eval _BS_TARGET_TYPE_$(1)/$(target) = $(2)) \
     $(eval _BS_BUILD_TARGET_$(1)/$(target) = \
         $(BUILDDIR)/$$(call get-default,$($(target)_FILENAME),$$(call _BS_DEFAULT_OUTPUT_$(2),$(target),$(1)/$(target)))) \
+    $(eval _BS_EXTRA_TARGETS_$(1)/$(target) = \
+        $(call _BS_EXTRA_TARGETS_$(2),$(1)/$(target))) \
     $(eval SUBDIR_$(1)/$(target) = $(1)) \
     $(eval $(call _BS_EXTRA_TARGET_SETTINGS_$(2),$(1),$(target))) \
     $(foreach v,$(TARGET_VARIABLES), \
@@ -62,6 +64,6 @@ GENERATED_SOURCE_DIR=$(TMPDIR)/generated_source
 #include $(foreach s,$(SUBDIRS),$(s)/build.mk)
 $(foreach s,$(SUBDIRS),$(eval $(call subdir-include,$(s))))
 
-ALL_BUILD_TARGETS += $(foreach t, $(_BS_ALL_TARGETS), $(_BS_BUILD_TARGET_$(t)))
+ALL_BUILD_TARGETS += $(foreach t, $(_BS_ALL_TARGETS), $(_BS_BUILD_TARGET_$(t)) $(_BS_EXTRA_TARGETS_$(t)))
 
 endif

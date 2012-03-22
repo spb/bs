@@ -1,0 +1,4 @@
+LD_LIBRARY_PATH=build/lib build/bin/test_pass
+Running passing test
+LD_LIBRARY_PATH=build/lib build/bin/test_needs_dso
+Running test that needs a library

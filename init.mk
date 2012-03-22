@@ -16,5 +16,6 @@ CPPFLAGS = -I.
 
 BINDIR = $(if $(PREFIX),$(PREFIX)/)bin
 LIBDIR = $(if $(PREFIX),$(PREFIX)/)lib
+TESTDIR ?= $(BINDIR)
 
 endif
