@@ -19,7 +19,7 @@ $(2): $(3) | $(dir $(2))
 	xsubpp -csuffix _XS.cpp \
 	    -prototypes \
 	    $(call expand-target-variable,$(1),XSFLAGS) \
-	    $$< >$$@
+	    $$< | sed 's/\x0/\\0/g' >$$@
 
 #	    $(if $(call get-target-variable,$(1),XS_TYPEMAP),-typemap $(call get-target-variable,$(1),XS_TYPEMAP)) \
 
