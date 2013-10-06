@@ -30,8 +30,16 @@ get-unless-default = $(if $(filter-out $(2),$(1)),$(1))
 # Adds all the given directories to the list of those which will be
 # automatically created.
 #
+# This is stupid: one version of this function works on make 3.81
+# but not make 3.82, while the version that works on 3.82 spews
+# screenfuls of warnings on 3.81. Ugly hack time.
+ifeq ($(MAKE_VERSION),3.81)
 _do_add_dir=$(if $(filter $(1),$(DIRS)),,$(eval DIRS += $(1)))
-_add_one_dir=$(call _do_add_dir,$(patsubst %/,%,$(1))/)
+_add_one_dir=$(call _do_add_dir,$(patsubst %/,%,$(1)/))
+else
+_do_add_dir=$(if $(filter $(1),$(DIRS)),,$(eval DIRS += $(1) $(1)/))
+_add_one_dir=$(call _do_add_dir,$(patsubst %/,%,$(1)))
+endif
 add-dir=$(foreach d,$(1),$(call _add_one_dir,$(patsubst %/,%,$(d))))
 
 # save-vars
