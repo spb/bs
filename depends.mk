@@ -71,6 +71,19 @@ expand-target-dependency-dsos = $(filter %.so, $(expand-target-dependency-files)
 #
 expand-target-dependency-statics = $(filter-out %.so, $(expand-target-dependency-files))
 
+# expand-target-dependency-makefiles
+#
+# Arguments: target name
+#
+# Returns the list of makefiles modifications to which should trigger rebuilding this target.
+# It's a bit heuristic; technically a change to any build.mk file *could* change the build
+# behaviour of any target, but this is what's most likely to be right most of the time. Do a
+# full rebuild if in doubt.
+expand-target-dependency-makefiles = $(addsuffix /build.mk, \
+    					$(patsubst %/,%,$(call expand-subdir-plus-parents,$(SUBDIR_$(1)))))
+expand-subdir-plus-parents = $(if $(filter ./,$(1)),, \
+				$(1) $(call expand-subdir-plus-parents,$(dir $(patsubst %/,%,$(1)))))
+
 # expand-dependency-file
 #
 # Arguments: a dependency specification

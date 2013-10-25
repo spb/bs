@@ -1,0 +1,2 @@
+g++ -o build/bin/executable intermediate/executable/test_executable.o  -Lbuild/bin -Wl,-rpath-link,build/bin       -ltest   
+g++ -o build/bin/executable2 intermediate/executable/executable2/test_executable.o  -Lbuild/bin -Wl,-rpath-link,build/bin       -ltest2   

@@ -125,6 +125,10 @@ touch library/test_library.cc
 touch library2/test_library_2.cc
 run_and_compare library_relink make
 
+echo "Checking rebuild after makefile change"
+touch executable/build.mk
+run_and_compare rebuild_makefile_change make
+
 #
 # Start over with a prefix defined
 #
