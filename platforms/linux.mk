@@ -1,0 +1,6 @@
+ifndef BS__PLATFORM_LINUX_MK
+BS__PLATFORM_LINUX_MK=1
+
+BS_DSO_SUFFIX=so
+
+endif

@@ -1,0 +1,7 @@
+ifndef BS__PLATFORM_CYGWIN_MK
+BS__PLATFORM_CYGWIN_MK=1
+
+BS_DSO_SUFFIX=dll
+
+endif
+
