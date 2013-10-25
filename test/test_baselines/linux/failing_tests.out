@@ -1,0 +1,5 @@
+g++ -c -I.      -o intermediate/tests_fail/fail.o tests_fail/fail.cpp
+g++ -o build/bin/test_fail intermediate/tests_fail/fail.o  -Lbuild/lib -Wl,-rpath-link,build/lib     
+LD_LIBRARY_PATH=build/lib build/bin/test_fail
+Running failing test
+make: *** [run_test_tests_fail/test_fail] Error 1
