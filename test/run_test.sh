@@ -3,6 +3,16 @@
 TEST_TEMP_DIR=test_run
 TEST_BASELINE_DIR=test_baselines
 
+if [[ $(uname) == CYGWIN* ]]; then
+    dsodir=bin
+    dsoext=dll
+    PLATFORM=cygwin
+else
+    dsodir=lib
+    dsoext=so
+    PLATFORM=linux
+fi
+
 run()
 {
     local name=$1;
@@ -42,7 +52,9 @@ run_and_compare()
 
     mkdir -p "${TEST_TEMP_DIR}"
     TEST_OUT="${TEST_TEMP_DIR}/${name}.out"
-    BASELINE_OUT="${TEST_BASELINE_DIR}/${name}.out"
+
+    BASELINE_OUT="${TEST_BASELINE_DIR}/${PLATFORM}/${name}.out"
+    [[ -f ${BASELINE_OUT} ]] || BASELINE_OUT="${TEST_BASELINE_DIR}/${name}.out"
 
     echo -n "Running '${cmd[@]}' ... "
     if ! "${cmd[@]}" >"${TEST_OUT}"; then
@@ -81,7 +93,7 @@ run_and_compare source_subdirs ./build/bin/source_subdirs
 run_and_compare test_libname ./build/bin/test_libname
 # Above will probably still run even if the library name setting failed,
 # due to magic -l setting
-assert [[ -f build/lib/libtestlibname.so ]]
+assert [[ -f build/$dsodir/libtestlibname.$dsoext ]]
 assert [[ -f build/lib/testfilename.so ]]
 
 # Check perl extension built
@@ -131,16 +143,16 @@ rm -rf build intermediate
 run_and_compare make_tests make -f Makefile.tests
 
 rm -rf build intermediate
-echo -n "Running 'make -f Makefile.failingtests' ... "
-make -f Makefile.failingtests &>test_run/failing_tests.out
+echo -n "Running 'make -f Makefile.failingtest' ... "
+make -f Makefile.failingtest &>test_run/failing_tests.out
 ret=$?
 if [[ $ret == 0 ]]; then
     echo "succeeded, where it should have failed"
     exit 1
-elif diff -w -q test_baselines/failing_tests.out test_run/failing_tests.out; then
+elif diff -w -q test_baselines/${PLATFORM}/failing_tests.out test_run/failing_tests.out; then
     echo "OK"
 else
-    diff -w -u test_baselines/failing_tests.out test_run/failing_tests.out
+    diff -w -u test_baselines/${PLATFORM}/failing_tests.out test_run/failing_tests.out
     exit 1
 fi
 

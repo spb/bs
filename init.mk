@@ -15,7 +15,7 @@ DIRS =
 CPPFLAGS = -I.
 
 BINDIR = $(if $(PREFIX),$(PREFIX)/)bin
-LIBDIR = $(if $(PREFIX),$(PREFIX)/)lib
+LIBDIR = $(if $(PREFIX),$(PREFIX)/)$(BS_DSO_DIRNAME)
 TESTDIR ?= $(BINDIR)
 
 endif

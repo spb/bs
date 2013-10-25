@@ -1,0 +1,6 @@
+g++ -c -I.      -o intermediate/tests_fail/fail.o tests_fail/fail.cpp
+g++ -o build/bin/test_fail intermediate/tests_fail/fail.o  -Lbuild/bin -Wl,-rpath-link,build/bin     
+LD_LIBRARY_PATH=build/bin build/bin/test_fail
+Running failing test
+../bs.mk:43: recipe for target 'run_test_tests_fail/test_fail' failed
+make: *** [run_test_tests_fail/test_fail] Error 1

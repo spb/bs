@@ -1,0 +1,6 @@
+g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -o intermediate/library/test_library.o library/test_library.cc
+g++ -shared -o build/bin/libtest.dll intermediate/library/test_library.o  -Lbuild/bin -Wl,-rpath-link,build/bin      
+g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC  -D__BUILD_TEST_LIBRARY_2__ -o intermediate/library2/test_library_2.o library2/test_library_2.cc
+ar cru build/bin/libtest2.a intermediate/library2/test_library_2.o 
+g++ -o build/bin/executable intermediate/executable/test_executable.o  -Lbuild/bin -Wl,-rpath-link,build/bin       -ltest   
+g++ -o build/bin/executable2 intermediate/executable/executable2/test_executable.o  -Lbuild/bin -Wl,-rpath-link,build/bin       -ltest2   
