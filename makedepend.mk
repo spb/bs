@@ -20,6 +20,8 @@ $(2): $(3) | $(dir $(2))
 
 -include $(2)
 
+_BS_DEPENDENCY_FILES_$(1) += $(2)
+
 endef
 
 endif

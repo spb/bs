@@ -12,10 +12,11 @@ SUBDIR_VARIABLES += $(addsuffix S,$(_BS_SUPPORTED_TARGETS))
 DIRS =
 
 # Default values for variables that can later be added to or overridden
-CPPFLAGS = -I.
+CPPFLAGS += -I.
 
 BINDIR = $(if $(PREFIX),$(PREFIX)/)bin
 LIBDIR = $(if $(PREFIX),$(PREFIX)/)$(BS_DSO_DIRNAME)
+INCLUDEDIR = $(if $(PREFIX),$(PREFIX)/)include
 TESTDIR ?= $(BINDIR)
 
 endif

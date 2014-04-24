@@ -64,6 +64,7 @@ GENERATED_SOURCE_DIR=$(TMPDIR)/generated_source
 #include $(foreach s,$(SUBDIRS),$(s)/build.mk)
 $(foreach s,$(SUBDIRS),$(eval $(call subdir-include,$(s))))
 
-ALL_BUILD_TARGETS += $(foreach t, $(_BS_ALL_TARGETS), $(_BS_BUILD_TARGET_$(t)) $(_BS_EXTRA_TARGETS_$(t)))
+ALL_BUILD_TARGETS += $(foreach t, $(_BS_ALL_TARGETS), \
+			$(_BS_BUILD_TARGET_$(t)) $(_BS_EXTRA_TARGETS_$(t)) $(_BS_EXTRA_TARGET_DEPS_$(t)))
 
 endif

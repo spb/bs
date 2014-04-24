@@ -1,6 +1,7 @@
 ifndef BS__OBJECTS_MK
 BS__OBJECTS_MK=1
 
+# $(1) = target name, $(2) = language, $(3) = input source file name, $(4) = header type (if applicable)
 _bs_source_to_object=$(TMPROOT)/$(SUBDIR_$(1))/$(call _BS_LANGUAGE_OBJECTS_$(2),$(basename $(3)))
 _bs_source_to_source=$(TMPROOT)/$(SUBDIR_$(1))/generated_source/$(call _BS_LANGUAGE_GENERATED_SOURCES_$(2),$(basename $(3)))
 
@@ -47,6 +48,9 @@ $(if $(call _BS_LANGUAGE_OBJECTS_$(2),$(3)), \
 $(if $(call _BS_LANGUAGE_GENERATED_SOURCES_$(2),$(3)),
     $(call _bs_process_source_to_source_file,$(1),$(2),$(3)))
 
+$(if $(call _BS_LANGUAGE_GENERATED_HEADER_TYPES_$(2),$(3)),
+    $(call _bs_process_source_to_headers,$(1),$(2),$(3)))
+
 endef
 
 # $(1) = target, $(2) = language, $(3) = source file
@@ -75,6 +79,24 @@ $(foreach lang,$(_BS_SUPPORTED_LANGUAGES), \
 
 endef
 
+# $(1) = target name, $(2) = language, $(3) = input source file name, $(4) = header type (if applicable)
+_bs_source_to_header=$(call __bs_source_to_header,$(1),$(2),$(3),$(4))$(info _bs_source_to_header($(1),$(2),$(3),$(4))=$(call __bs_source_to_header,$(1),$(2),$(3),$(4)))
+_bs_source_to_header=$(if $(value _BS_LANGUAGE_INSTALLED_HEADERS_$(2)_$(4)), \
+		     	$(call _BS_LANGUAGE_INSTALLED_HEADERS_$(2)_$(4),$(basename $(3)),$(1)), \
+			$(TMPROOT)/$(SUBDIR_$(1))/generated_source/$(call _BS_LANGUAGE_GENERATED_HEADERS_$(2)_$(4),$(basename $(3)),$(4)))
+
+# $(1) = target, $(2) = language, $(3) = source file
+define _bs_process_source_to_headers
+
+$(foreach type,$(_BS_LANGUAGE_GENERATED_HEADER_TYPES_$(2)),
+    $(eval $(call _BS_LANGUAGE_COMPILE_RULE_$(2)_$(type),$(1), \
+	$(call _bs_source_to_header,$(1),$(2),$(3),$(type)), \
+	$(call _bs_find_source_file,$(1),$(3)))))
+
+$(foreach type,$(_BS_LANGUAGE_GENERATED_HEADER_TYPES_$(2)),
+    $(eval _BS_GENERATED_HEADERS_$(2)_$(1) += $(call _bs_source_to_header,$(1),$(2),$(3),$(type))))
+
+endef
 
 $(foreach target, $(_BS_ALL_TARGETS), \
     $(foreach lang, $(_BS_SUPPORTED_LANGUAGES), \
@@ -83,5 +105,22 @@ $(foreach target, $(_BS_ALL_TARGETS), \
 
 $(foreach target, $(_BS_ALL_TARGETS), \
     $(eval _BS_OBJECTS_$(target) = $(foreach lang, $(_BS_SUPPORTED_LANGUAGES),$(_BS_OBJECTS_$(lang)_$(target)))))
+
+$(foreach target, $(_BS_ALL_TARGETS), \
+    $(eval _BS_GENERATED_HEADERS_$(target) = $(foreach lang, $(_BS_SUPPORTED_LANGUAGES),$(_BS_GENERATED_HEADERS_$(lang)_$(target)))) \
+    $(eval _BS_EXTRA_TARGET_DEPS_$(target) = $(_BS_GENERATED_HEADERS_$(target))))
+
+# Force generated headers to be created before objects, and dependency files to be regenerated once the headers are created
+# $(1) = target
+define generated-header-dep-rule
+
+$(_BS_OBJECTS_$(1)): | $(_BS_GENERATED_HEADERS_$(1))
+
+$(_BS_DEPENDENCY_FILES_$(1)): $(_BS_GENERATED_HEADERS_$(1))
+
+endef
+
+$(foreach target, $(_BS_ALL_TARGETS), \
+    $(eval $(call generated-header-dep-rule,$(target))))
 
 endif
