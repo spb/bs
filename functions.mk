@@ -78,7 +78,8 @@ load-vars=$(foreach v,$(__saved_vars_$(1)),$(eval $(v)=$(value __saved_$(v)_$(1)
 
 expand-target-variable=$($(2)) \
 			$(if $(filter $(2),$(SUBDIR_VARIABLES)),$($(SUBDIR_$(1))_$(2)),) \
-			$(if $(filter $(2),$(TARGET_VARIABLES)),$($(1)_$(2)),)
+			$(if $(filter $(2),$(TARGET_VARIABLES)),$($(1)_$(2)),) \
+			$(if $(filter $(2),$(TARGET_VARIABLES)),$(_BS_INTERNAL_$(1)_$(2)),)
 
 # get-target-variable
 #

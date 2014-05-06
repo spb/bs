@@ -24,6 +24,10 @@ $(_BS_BUILD_TARGET_$(1)): $(_BS_OBJECTS_$(1)) \
 	    $(call expand-target-variable,$(1),LDFLAGS) \
 	    $(call expand-target-dependencies,$(1)) \
 
+# Need -fPIC when building DSOs on linux, for example
+_BS_INTERNAL_$(1)_CFLAGS += $(BS_DSO_CFLAGS)
+_BS_INTERNAL_$(1)_CXXFLAGS += $(BS_DSO_CXXFLAGS)
+
 endef
 
 endif

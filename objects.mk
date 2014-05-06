@@ -80,7 +80,6 @@ $(foreach lang,$(_BS_SUPPORTED_LANGUAGES), \
 endef
 
 # $(1) = target name, $(2) = language, $(3) = input source file name, $(4) = header type (if applicable)
-_bs_source_to_header=$(call __bs_source_to_header,$(1),$(2),$(3),$(4))$(info _bs_source_to_header($(1),$(2),$(3),$(4))=$(call __bs_source_to_header,$(1),$(2),$(3),$(4)))
 _bs_source_to_header=$(if $(value _BS_LANGUAGE_INSTALLED_HEADERS_$(2)_$(4)), \
 		     	$(call _BS_LANGUAGE_INSTALLED_HEADERS_$(2)_$(4),$(basename $(3)),$(1)), \
 			$(TMPROOT)/$(SUBDIR_$(1))/generated_source/$(call _BS_LANGUAGE_GENERATED_HEADERS_$(2)_$(4),$(basename $(3)),$(4)))
@@ -98,6 +97,16 @@ $(foreach type,$(_BS_LANGUAGE_GENERATED_HEADER_TYPES_$(2)),
 
 endef
 
+# Apply any default settings based on target type
+$(foreach target, $(_BS_ALL_TARGETS), \
+    $(foreach v,$(TARGET_VARIABLES), \
+    	$(if $($(target)_$(v)),, \
+	    $(eval $(target)_$(v)=$(call _BS_DEFAULT_$(_BS_TARGET_TYPE_$(target))_$(v),$(target)))\
+	)))
+
+
+# Actually evaluate all the language rules
+#
 $(foreach target, $(_BS_ALL_TARGETS), \
     $(foreach lang, $(_BS_SUPPORTED_LANGUAGES), \
         $(eval $(call _bs_process_language_target,$(target),$(lang))) \
@@ -110,7 +119,9 @@ $(foreach target, $(_BS_ALL_TARGETS), \
     $(eval _BS_GENERATED_HEADERS_$(target) = $(foreach lang, $(_BS_SUPPORTED_LANGUAGES),$(_BS_GENERATED_HEADERS_$(lang)_$(target)))) \
     $(eval _BS_EXTRA_TARGET_DEPS_$(target) = $(_BS_GENERATED_HEADERS_$(target))))
 
+
 # Force generated headers to be created before objects, and dependency files to be regenerated once the headers are created
+# Must come after the language rule processing so that the full header lists are created
 # $(1) = target
 define generated-header-dep-rule
 
@@ -122,5 +133,10 @@ endef
 
 $(foreach target, $(_BS_ALL_TARGETS), \
     $(eval $(call generated-header-dep-rule,$(target))))
+
+# For each target, add its generated source directory to the include path for that target so that generated headers are picked up
+$(foreach target, $(_BS_ALL_TARGETS), \
+    $(eval _BS_INTERNAL_$(target)_CPPFLAGS = -I$(TMPROOT)/$(SUBDIR_$(target))/generated_source))
+
 
 endif
