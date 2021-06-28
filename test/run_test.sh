@@ -87,6 +87,7 @@ export LD_LIBRARY_PATH=build/lib:$LD_LIBRARY_PATH
 run make
 run_and_compare executable ./build/bin/executable
 run_and_compare executable2 ./build/bin/executable2
+run_and_compare executable_ending_+ ./build/bin/executable_ending_+
 run_and_compare multiple_languages ./build/bin/multi_language
 run_and_compare source_subdirs ./build/bin/source_subdirs
 

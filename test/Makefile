@@ -1,6 +1,7 @@
 SUBDIRS = library \
 	  library2 \
 	  executable \
+	  subdir_ending_+ \
 	  multiple_languages \
 	  generated_source \
 	  source_subdirs \
