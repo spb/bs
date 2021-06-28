@@ -13,7 +13,7 @@ $(call add-dir,$(dir $(_BS_BUILD_TARGET_$(1))))
 
 $(_BS_BUILD_TARGET_$(1)): $(_BS_OBJECTS_$(1)) | $(call dirname,$(_BS_BUILD_TARGET_$(1)))
 	@rm -f $$@
-	ar cru $$@ $(_BS_OBJECTS_$(1))
+	ar cr $$@ $(_BS_OBJECTS_$(1))
 
 endef
 
