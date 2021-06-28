@@ -1,5 +1,5 @@
-g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -o intermediate/library/test_library.o library/test_library.cc
-g++ -shared -o build/lib/libtest.so    intermediate/library/test_library.o  -Lbuild/lib -Wl,-rpath-link,build/lib  
-g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC  -D__BUILD_TEST_LIBRARY_2__ -o intermediate/library2/test_library_2.o library2/test_library_2.cc
-ar cru build/lib/libtest2.a intermediate/library2/test_library_2.o 
-g++ -o build/bin/executable2    intermediate/executable/executable2/test_executable.o  -Lbuild/lib -Wl,-rpath-link,build/lib    -ltest2  
+g++ -c -I.   -Iintermediate/library/generated_source -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -fPIC -o intermediate/library/test_library.o library/test_library.cc
+g++ -shared -o build/lib/libtest.so intermediate/library/test_library.o  -Lbuild/lib -Wl,-rpath-link,build/lib       
+g++ -c -I.   -Iintermediate/library2/generated_source -D__GLOBAL_DEFINE__ -fPIC  -D__BUILD_TEST_LIBRARY_2__  -o intermediate/library2/test_library_2.o library2/test_library_2.cc
+ar cr build/lib/libtest2.a intermediate/library2/test_library_2.o 
+g++ -o build/bin/executable2 intermediate/executable/executable2/test_executable.o  -Lbuild/lib -Wl,-rpath-link,build/lib        -ltest2   

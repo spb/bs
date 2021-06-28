@@ -1,7 +1,7 @@
-g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -o intermediate/library/test_library.o library/test_library.cc
-g++ -shared -o build/lib/libtest.so    intermediate/library/test_library.o  -Lbuild/lib -Wl,-rpath-link,build/lib  
-g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/executable/test_executable.o executable/test_executable.cc
-g++ -o build/bin/executable    intermediate/executable/test_executable.o  -Lbuild/lib -Wl,-rpath-link,build/lib    -ltest  
-g++ -c -I.   -D__GLOBAL_DEFINE__ -fPIC   -o intermediate/library_file_dependencies/library/library.o library_file_dependencies/library/library.cpp
-g++ -shared -o build/lib/libdeptestlibrary.so    intermediate/library_file_dependencies/library/library.o  -Lbuild/lib -Wl,-rpath-link,build/lib  
+g++ -c -I.   -Iintermediate/library/generated_source -D__GLOBAL_DEFINE__ -fPIC -D__BUILD_TEST_LIBRARY__  -fPIC -o intermediate/library/test_library.o library/test_library.cc
+g++ -shared -o build/lib/libtest.so intermediate/library/test_library.o  -Lbuild/lib -Wl,-rpath-link,build/lib       
+g++ -c -I.   -Iintermediate/executable/generated_source -D__GLOBAL_DEFINE__ -fPIC    -o intermediate/executable/test_executable.o executable/test_executable.cc
+g++ -o build/bin/executable intermediate/executable/test_executable.o  -Lbuild/lib -Wl,-rpath-link,build/lib        -ltest   
+g++ -c -I.   -Iintermediate/library_file_dependencies/library/generated_source -D__GLOBAL_DEFINE__ -fPIC   -fPIC -o intermediate/library_file_dependencies/library/library.o library_file_dependencies/library/library.cpp
+g++ -shared -o build/lib/libdeptestlibrary.so intermediate/library_file_dependencies/library/library.o  -Lbuild/lib -Wl,-rpath-link,build/lib       
 cp -p script/TestData/TestTwo.pm build/lib/TestData/TestTwo.pm
