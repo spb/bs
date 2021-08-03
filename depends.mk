@@ -38,7 +38,7 @@ expand-target-dependencies = \
 #
 
 expand-dependency = \
-    $(if $(filter -l%,$(1)), \
+    $(if $(filter -%,$(1)), \
         $(1), \
         $(addprefix -L,$(call get-unless-default,$(dir $(_BS_BUILD_TARGET_$(1))),$(BUILDDIR)/$(LIBDIR)/)) \
             -l$(LIBRARY_NAME_$(1)) \
